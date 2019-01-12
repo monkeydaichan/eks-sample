@@ -1,25 +1,27 @@
 #!/bin/bash -eu
 
 CLUSTER_CONTROL_PLANE_SECURITY_GROUP=$(aws cloudformation describe-stacks \
-    --stack-name $EKS_VPC_STACK_NAME \
+    --stack-name $BASE_STACK_NAME \
     --query 'Stacks[0].Outputs[?OutputKey==`SecurityGroups`].[OutputValue][0][0]' \
     | sed -E 's/.(.*)./\1/')
 
-NODE_GROUP_NAME=eks-worker-node-group
-NODE_AUTO_SCALING_GROUP_MIN_SIZE=1
-NODE_AUTO_SCALING_GROUP_MAX_SIZE=3
-NODE_INSTANCE_TYPE=$EKS_WORKER_INSTANCE_TYPE
+# NODE_GROUP_NAME=eks-worker-node-group
+# NODE_AUTO_SCALING_GROUP_MIN_SIZE=1
+# NODE_AUTO_SCALING_GROUP_MAX_SIZE=3
+# NODE_INSTANCE_TYPE=$EKS_WORKER_INSTANCE_TYPE
 # TODO Support us-east-1
-NODE_IMAGE_ID=$EKS_WORKER_AMI
-KEY_NAME=eks-key
+# NODE_IMAGE_ID=$EKS_WORKER_AMI
+# KEY_NAME=eks-key
 
 VPC_ID=$(aws cloudformation describe-stacks \
-    --stack-name $EKS_VPC_STACK_NAME \
+    --stack-name $BASE_STACK_NAME \
     --query 'Stacks[0].Outputs[?OutputKey==`VpcId`].[OutputValue][0][0]' \
     | sed -E 's/.(.*)./\1/')
+    # --stack-name $EKS_VPC_STACK_NAME \
 SUBNETS=$(aws cloudformation describe-stacks \
-    --stack-name $EKS_VPC_STACK_NAME \
+    --stack-name $BASE_STACK_NAME \
     --query 'Stacks[0].Outputs[?OutputKey==`SubnetIds`].[OutputValue][0][0]')
+    # --stack-name $EKS_VPC_STACK_NAME \
 
 aws cloudformation create-stack \
     --stack-name $EKS_WORKER_STACK_NAME \

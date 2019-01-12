@@ -1,0 +1,24 @@
+# CFN STACK NAME
+export BASE_STACK_NAME='eks-dev-base'
+export EKS_WORKER_STACK_NAME='eks-worker-stack'
+
+# EKS MASTER SETTING
+export EKS_CLUSTER_NAME='eks-cluster'
+
+# EKS WORKER SETTING
+export NODE_INSTANCE_TYPE='t2.small'
+export NODE_IMAGE_ID='ami-02415125ccd555295'
+export NODE_AUTO_SCALING_GROUP_MIN_SIZE='1'
+export NODE_AUTO_SCALING_GROUP_MAX_SIZE='3'
+export NODE_GROUP_NAME='eks-worker-node-group'
+
+# KEY NAME
+export EKS_KEY_NAME='eks-key'
+
+# LOCAL SETTING
+export EKS_SECRET_DIR=`pwd`/env
+export EKS_KEY_FILE=$EKS_SECRET_DIR/$EKS_KEY_NAME.pem
+export EKS_KUBE_CONFIG_FILE=~/.kube/config-$EKS_CLUSTER_NAME
+
+# KUBECTL CONFIG
+export KUBECONFIG=$KUBECONFIG':'$EKS_KUBE_CONFIG_FILE
