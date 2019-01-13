@@ -16,7 +16,7 @@ SECURITY_GROUP_IDS=$(aws cloudformation describe-stacks \
     --query 'Stacks[0].Outputs[?OutputKey==`SecurityGroups`].[OutputValue][0][0]' \
     | sed -E 's/.(.*)./\1/')
 
-aws eks cluster \
+aws eks create-cluster \
     --name $EKS_CLUSTER_NAME \
     --role-arn $ROLE_ARN \
     --resources-vpc-config subnetIds=$SUBNET_IDS,securityGroupIds=$SECURITY_GROUP_IDS
