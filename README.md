@@ -11,25 +11,25 @@ AWS CLI
 ### Start EKS
 
 ```bash
-./eks-start.sh
+$ ./eks-start.sh
 ```
 
 ### Deploy Dashboard
 
 ```bash
-./resource/dashboard/deploy.sh
+$ ./resource/dashboard/deploy.sh
 ```
 
 ### Deploy sample application
 
 ```bash
-./resource/sample-application/deploy.sh
+$ ./resource/sample-application/deploy.sh
 ```
 
 ### Delete sample application
 
 ```bash
-./resource/sample-application/delete.sh
+$ ./resource/sample-application/delete.sh
 ```
 
 ### Add iam user
@@ -38,14 +38,14 @@ To use the kubectlk command by another IAM user, you need to update the configma
 Change the `<ARN of the IAM user you want to add>` and `<Any name>` of the `prepare/config/configmap.yml` file.
 
 ```bash
-source env/env.sh
+$ source env/env.sh
 
-ROLE_ARN=$(aws cloudformation describe-stacks \
+$ ROLE_ARN=$(aws cloudformation describe-stacks \
     --stack-name $EKS_WORKER_STACK_NAME \
     --query 'Stacks[0].Outputs[0].OutputValue' \
     | sed -E 's/.(.*)./\1/')
 
-cat << EOT > prepare/config/configmap.yml
+$ cat << EOT > prepare/config/configmap.yml
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -68,13 +68,13 @@ data:
 Deploy `prepare/config/configmap.yml` file.
 
 ```bash
-kubectl apply -f prepare/config/configmap.yml
+$ kubectl apply -f prepare/config/configmap.yml
 ```
 
 ### Delete EKS
 
 ```bash
-./all-delete.sh
+$ ./all-delete.sh
 ```
 
 ## License
