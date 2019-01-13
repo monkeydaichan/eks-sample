@@ -11,7 +11,7 @@ AWS CLI
 ### Start EKS
 
 ```bash
-./launch.sh
+./eks-start.sh
 ```
 
 ### Deploy Dashboard
