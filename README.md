@@ -32,6 +32,45 @@ AWS CLI
 ./resource/sample-application/delete.sh
 ```
 
+### Add iam user
+Only the IAM user who created the EKS cluster can use the kubectl command.  
+To use the kubectlk command by another IAM user, you need to update the configmap.  
+Change the `<ARN of the IAM user you want to add>` and `<Any name>` of the `prepare/config/configmap.yml` file.
+
+```bash
+source env/env.sh
+
+ROLE_ARN=$(aws cloudformation describe-stacks \
+    --stack-name $EKS_WORKER_STACK_NAME \
+    --query 'Stacks[0].Outputs[0].OutputValue' \
+    | sed -E 's/.(.*)./\1/')
+
+cat << EOT > prepare/config/configmap.yml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: aws-auth
+  namespace: kube-system
+data:
+  mapRoles: |
+    - rolearn: $ROLE_ARN
+      username: system:node:{{EC2PrivateDNSName}}
+      groups:
+        - system:bootstrappers
+        - system:nodes
+  mapUsers: |
+    - userarn: <The ARN of the IAM user you want to add>
+      username: <Any name>
+      groups:
+        - system:masters
+```
+
+Deploy `prepare/config/configmap.yml` file.
+
+```bash
+kubectl apply -f prepare/config/configmap.yml
+```
+
 ### Delete EKS
 
 ```bash
